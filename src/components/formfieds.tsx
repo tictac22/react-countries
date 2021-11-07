@@ -37,7 +37,7 @@ export const Form:React.FC<Props> = ({nameSearch,setNameSearch,setRegionSearch})
                         isSearchable={false} 
                         placeholder={"Filter by region"}
                         isClearable={true}
-                        onChange={()=>{setRegionSearch}}
+                        onChange={setRegionSearch}
                         options={options}/>
                 </Wrapper>
             </div>
