@@ -9,6 +9,7 @@ import { Home } from "./pages/home"
 import { Details } from "./pages/details"
 
 import styled from "styled-components"
+import { HelmetProvider } from "react-helmet-async"
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,17 +20,19 @@ const queryClient = new QueryClient({
 });
 export const App:React.FC = () => {
     return (
-        <QueryClientProvider client={queryClient}>
-        <Wrapper>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/:code" element={<Details/>} />
-                </Routes>
-            </Router>
-        </Wrapper>
-        <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+            <Wrapper>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/:code" element={<Details/>} />
+                    </Routes>
+                </Router>
+            </Wrapper>
+            <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </HelmetProvider>
     )
 }
 const Wrapper = styled.div`

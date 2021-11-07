@@ -1,5 +1,6 @@
 
 import React from "react"
+import {Helmet } from "react-helmet-async";
 
 import {useParams,Link} from "react-router-dom"
 
@@ -7,7 +8,7 @@ import { Header } from "../components/header";
 import {BsArrowLeft} from "react-icons/bs"
 
 import { useQuery } from "react-query";
-import { fetchCountriesName, fetchCountry } from "../api";
+import { fetchCountriesName, fetchCountry, numberWithCommas } from "../api";
 
 import styled from "styled-components";
 
@@ -18,6 +19,10 @@ export const Details:React.FC = () => {
     const {isLoading:loading, data:borders } = useQuery(["countryNames",countryBorders],()=>fetchCountriesName(countryBorders),{enabled: !!countryBorders});
     return (
         <>
+        <Helmet>
+            <title>{data?.name}</title>
+            <link rel="shortcut icon" href={data?.flags?.svg}></link>
+        </Helmet>
         <Header/>
         <Wrapper>
         <div className="container">
@@ -31,7 +36,6 @@ export const Details:React.FC = () => {
                 {isLoading || loading  ? <Spinner></Spinner> :
                 error ? <Error>Error on server side, please retry</Error> : 
                 <>
-                {console.log(data.currencies?.length && data.currencies)}
                     <Image>
                         <img src={`${data.flags.svg}`} alt={data.name}/>
                     </Image>
@@ -40,7 +44,7 @@ export const Details:React.FC = () => {
                         <InfoText>
                             <div id="1">
                                 <p>Native Name: <span>{data.nativeName}</span></p>
-                                <p>Population: <span>{data.population}</span></p>
+                                <p>Population: <span>{numberWithCommas(data.population)}</span></p>
                                 <p>Region: <span>{data.region}</span></p>
                                 <p>Sub Region: <span>{data.subregion}</span></p>
                                 <p>Capital: <span>{data.capital || "No capital"}</span></p>

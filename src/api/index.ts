@@ -28,3 +28,6 @@ export const fetchCountries = async ():Promise<Countries[]> => {
     const json = await response.json();    
     return json;
 }
+export const  numberWithCommas = (x:number):string => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

@@ -5,7 +5,6 @@ import {BsMoon,BsMoonFill} from 'react-icons/bs';
 import styled from "styled-components";
 
 export const Header:React.FC = memo(() => {
-    console.log("hello header")
     const [theme,setTheme] = useState<string>(localStorage.getItem("theme") ?? "light");
     useEffect(()=>{
             document.body.setAttribute("data-theme",theme);

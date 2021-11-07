@@ -12,7 +12,6 @@ interface Props {
     error:boolean
 }
 export const CountryLists:React.FC<Props> = memo(({data,isLoading,error}) => {
-    console.log("hello lists")
     return (
         <Wrapper>
             <div className="container">

@@ -141,11 +141,13 @@ const CustomSelect = styled(Select).attrs({
         },
     }
 })`
-
-@media(max-width:550px) {
+    @media(max-width:550px) {
         margin-top:20px;
-}
-& > div[id] {
-    background-color:var(--color-bg)
-}
+    }
+    & > div[id] {
+        background-color:var(--color-bg)
+    }
+    & .css-tlfecz-indicatorContainer  svg {
+        fill:var(--color-search)
+    }
 `

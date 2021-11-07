@@ -1,5 +1,6 @@
 
 import React, { useState } from "react"
+import {Helmet} from "react-helmet-async";
 
 import { useQuery } from "react-query"
 
@@ -24,7 +25,10 @@ export const Home:React.FC = () => {
     })();
 
     return (
-        <>
+        <>  <Helmet>
+                <title>Home</title>
+                
+            </Helmet>
             <Header/>
             <Form nameSearch={nameSearch} setNameSearch={setNameSearch} setRegionSearch={setRegionSearch}  />
             <CountryLists data={mutatedData!} isLoading={isLoading} error={error!} />

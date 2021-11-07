@@ -6,13 +6,11 @@ import { Link } from "react-router-dom";
 
 import { Countries } from "../interfaces";
 
+import { numberWithCommas } from "../api";
+
 import styled from "styled-components"
 
-const  numberWithCommas = (x:number):string => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 export const CountryItem:React.FC<Countries> = ({flags,name,population,region,capital,alpha2Code}) => {
-    console.log("hello itemLists")
     return (
         <Link to={`/${alpha2Code}`}>
             <Wrapper>
