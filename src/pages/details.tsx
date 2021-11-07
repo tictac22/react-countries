@@ -117,7 +117,7 @@ const Image = styled.div`
 const Info = styled.div`
     flex: 0 1 50%;
     
-    margin-top:40px;
+    margin-top:62px;
     @media(max-width:850px) {
         margin-top: 15px;
     }
