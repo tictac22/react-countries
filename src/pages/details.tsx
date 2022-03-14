@@ -179,6 +179,10 @@ const LinkToCountry = styled.div`
     margin-right:5px;
     color:var(--color-text);
     font-weight:300;
+    transition: all 0.1s linear;
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
 `
 
 const Spinner =styled.div`
