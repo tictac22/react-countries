@@ -1,0 +1,137 @@
+*,
+*::before,
+*::after {
+   box-sizing: border-box;
+   padding: 0;
+   margin: 0;
+   border: none;
+}
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap');
+html,
+body {
+   height: 100%;
+   overflow-x: hidden;
+   font-family: 'Nunito Sans', sans-serif;
+   font-size: 14px;
+   font-weight: 300;
+}
+:root {
+   
+}
+/*- Dark Blue (Dark Mode Elements): hsl(209, 23%, 22%)
+- Very Dark Blue (Dark Mode Background): hsl(207, 26%, 17%)
+- Very Dark Blue (Light Mode Text): hsl(200, 15%, 8%)
+- Dark Gray (Light Mode Input): hsl(0, 0%, 52%)
+- Very Light Gray (Light Mode Background): hsl(0, 0%, 98%)
+- White (Dark Mode Text & Light Mode Elements): hsl(0, 0%, 100%)*/
+body[data-theme="dark"] {
+   --color-elements:hsl(209, 23%, 22%);
+   --color-bg:hsl(207, 26%, 17%);
+   --color-bg-alpha:hsl(208, 26%, 13%);
+   --color-text:hsl(0, 0%, 100%);
+   --shadow:rgba(7,7,10,20%) 0px 0px 24px;
+   --color-search:hsl(0, 0%, 100%);
+
+}
+body[data-theme="light"] {
+   --color-search:hsl(0, 0%, 52%);
+   --color-bg:hsl(0, 0%, 98%);
+   --color-bg-alpha:hsl(0, 50%, 94%);
+   --color-text:hsl(200, 15%, 8%);
+   --color-input:hsl(0, 0%, 52%);
+   --color-ui:hsl(0, 0%, 100%);
+   --shadow:rgba(149,157,165,0.2) 0px 8px 24px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-weight: normal;
+   margin-block-start: 0em;
+   margin-block-end: 0em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul {
+   margin: 0;
+   padding: 0;
+   font-weight: inherit;
+   font-size: inherit;
+}
+p {
+   margin-block-start: 0em;
+   margin-block-end: 0em;
+}
+
+a {
+   text-decoration: none;
+   color: inherit;
+   font-weight: inherit;
+}
+li {
+   list-style: none;
+}
+input {
+   border: none;
+   outline: none;
+}
+input::-webkit-input-placeholder {
+   opacity: 1;
+   transition: opacity 0.3s ease;
+}
+input::-moz-placeholder {
+   opacity: 1;
+   transition: opacity 0.3s ease;
+}
+input:-moz-placeholder {
+   opacity: 1;
+   transition: opacity 0.3s ease;
+}
+input:-ms-input-placeholder {
+   opacity: 1;
+   transition: opacity 0.3s ease;
+}
+input:focus::-webkit-input-placeholder {
+   opacity: 0;
+   transition: opacity 0.3s ease;
+}
+input:focus::-moz-placeholder {
+   opacity: 0;
+   transition: opacity 0.3s ease;
+}
+input:focus:-moz-placeholder {
+   opacity: 0;
+   transition: opacity 0.3s ease;
+}
+input:focus:-ms-input-placeholder {
+   opacity: 0;
+   transition: opacity 0.3s ease;
+}
+textarea:focus::-webkit-input-placeholder {
+   opacity: 0;
+}
+button {
+   border: none;
+   outline: none;
+   background-color: transparent;
+}
+textarea {
+   outline: none;
+   border: none;
+   resize: none;
+}
+address {
+   font-style: normal;
+}
+
+.container {
+   max-width: 1470px;
+   margin: 0 auto;
+   padding: 0px 15px;
+}
