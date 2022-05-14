@@ -8,70 +8,73 @@ import { Header } from "../components/header";
 import {BsArrowLeft} from "react-icons/bs"
 
 import { useQuery } from "react-query";
-import { fetchCountriesName, fetchCountry, numberWithCommas } from "../api";
 
 import styled from "styled-components";
 
-export const Details:React.FC = () => {
+import { getCountryByCode,getCountriesName,numberWithCommas } from './../api/index';
+
+const Details:React.FC = () => {
     const {code}  = useParams<string>();
-    const {isLoading, error, data } = useQuery(["country",code],()=>fetchCountry(code!));
+    const {isLoading, error, data } = useQuery(["country",code], async () => getCountryByCode(code));
+
     const countryBorders = data?.borders;
-    const {isLoading:loading, data:borders } = useQuery(["countryNames",countryBorders],()=>fetchCountriesName(countryBorders),{enabled: !!countryBorders});
+    const {isLoading:loading, data:borders } = useQuery(["countryNames",countryBorders], async ()=> getCountriesName(countryBorders),{enabled: !!countryBorders});
+
     return (
         <>
-        <Helmet>
-            <title>{data?.name}</title>
-            <link rel="shortcut icon" href={data?.flags?.svg}></link>
-        </Helmet>
-        <Header/>
-        <Wrapper>
-        <div className="container">
-            <Link to="/">
-                <Back>
-                    <BsArrowLeft/>
-                    <p>Back</p>
-                </Back>
-            </Link>
-            <Data>
-                {isLoading || loading  ? <Spinner></Spinner> :
-                error ? <Error>Error on server side, please retry</Error> : 
-                <>
-                    <Image>
-                        <img src={`${data.flags.svg}`} alt={data.name}/>
-                    </Image>
-                    <Info>
-                        <h2>{data.name}</h2>
-                        <InfoText>
-                            <div id="1">
-                                <p>Native Name: <span>{data.nativeName}</span></p>
-                                <p>Population: <span>{numberWithCommas(data.population)}</span></p>
-                                <p>Region: <span>{data.region}</span></p>
-                                <p>Sub Region: <span>{data.subregion}</span></p>
-                                <p>Capital: <span>{data.capital || "No capital"}</span></p>
-                            </div>
-                            <div>
-                                <p>Top Level Domain: <span>{data.topLevelDomain[0]}</span></p>
-                                <p>Currencies <span>{data.currencies?.length > 0 ? data.currencies[0].name : "No currency"}</span></p>
-                                <p style={{maxWidth:"300px"}}>Languages: <span>{(data.languages as {name:string}[]).map(item=>item.name).join(", ")}</span></p>
-                            </div>
-                        </InfoText>
-                        <Countries>
-                                <div style={{marginRight:"4px"}}>Border Countries:</div>{
-                                    borders!?.length > 0 ? borders!.map(item=>
-                                        <Link to={`/${item.alpha2Code}`} key={item.name}>
-                                            <LinkToCountry>{item.name}</LinkToCountry>
-                                        </Link>) 
-                                    :<div>There are no border countries</div>}
-                        </Countries>
-                    </Info>
-                </>
-                }
-            </Data>
-        </div>
-        </Wrapper>
+            <Helmet>
+                <title>{data?.name}</title>
+                <link rel="shortcut icon" href={data?.flags?.svg}></link>
+            </Helmet>
+            <Wrapper>
+                <div className="container">
+                    <Link to="/">
+                        <Back>
+                            <BsArrowLeft/>
+                            <p>Back</p>
+                        </Back>
+                    </Link>
+                    <Data>
+                        {isLoading || loading  ? <Spinner></Spinner> :
+                        error ? <Error>Error on server side, please retry</Error> : 
+                        <>
+                            <Image>
+                                <img src={`${data.flags.svg}`} alt={data.name}/>
+                            </Image>
+                            <Info>
+                                <h2>{data.name}</h2>
+                                <InfoText>
+                                    <div id="1">
+                                        <p>Native Name: <span>{data.nativeName}</span></p>
+                                        <p>Population: <span>{numberWithCommas(data.population)}</span></p>
+                                        <p>Region: <span>{data.region}</span></p>
+                                        <p>Sub Region: <span>{data.subregion}</span></p>
+                                        <p>Capital: <span>{data.capital || "No capital"}</span></p>
+                                    </div>
+                                    <div>
+                                        <p>Top Level Domain: <span>{data.topLevelDomain[0]}</span></p>
+                                        <p>Currencies <span>{data.currencies?.length > 0 ? data.currencies[0].name : "No currency"}</span></p>
+                                        <p style={{maxWidth:"300px"}}>Languages: <span>{(data.languages as {name:string}[]).map(item=>item.name).join(", ")}</span></p>
+                                    </div>
+                                </InfoText>
+                                <Countries>
+                                        <div style={{marginRight:"4px"}}>Border Countries:</div>{
+                                            borders!?.length > 0 ? borders!.map(item=>
+                                                <Link to={`/${item.alpha2Code}`} key={item.name}>
+                                                    <LinkToCountry>{item.name}</LinkToCountry>
+                                                </Link>) 
+                                            :<div>There are no border countries</div>}
+                                </Countries>
+                            </Info>
+                        </>
+                        }
+                    </Data>
+                </div>
+            </Wrapper>
         </>
     )
 }
+export default Details
 const Wrapper = styled.div`
     margin-top:30px;
 

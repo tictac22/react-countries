@@ -13,8 +13,8 @@ app.use('/graphql',graphqlHTTP((req,res) => ({
 	schema,
 	graphiql:true,
 	context: {req,res},
-	formatError:() => {
-		return {message:"error"}
+	formatError:(error) => {
+		return {message:"error",error}
 	}
 })))
 const main = async () => {

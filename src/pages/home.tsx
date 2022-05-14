@@ -1,37 +1,53 @@
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {Helmet} from "react-helmet-async";
 
-import { useQuery } from "react-query"
+import { useQuery,useInfiniteQuery } from "react-query"
 
-import { fetchCountries } from "../api"
 import { Countries, Regions } from "../interfaces"
 
 import { CountryLists } from "../components/countryLists"
 import { Form } from "../components/formfieds"
 import { Header } from "../components/header"
 
-export const Home:React.FC = () => {
-    const {isLoading, error, data } = useQuery<Countries[],boolean>("countries",fetchCountries);
+import { useInView } from 'react-intersection-observer'
+import { useDebounce } from './../hooks/useDebounce';
+import { getAllCountries,getCountriesByParams } from './../api/index';
+
+
+const Home:React.FC = () => {
+    const { ref, inView } = useInView()
+    const [page,setPage] = useState(20);
+    const {data, fetchNextPage, isLoading, error ,hasNextPage } = useInfiniteQuery("countries", async ({pageParam = 0}) => {
+        const data = await getAllCountries(pageParam,page)
+        setPage(page + 20)
+        return data            
+    },)
+
     const [nameSearch,setNameSearch] = useState<string>("");
+    const debouncedValue = useDebounce(nameSearch,500)
     const [regionSearch,setRegionSearch] = useState<Regions>({value:"",label:""});
-    const mutatedData = (() => {
-        let  datas = data;
-        datas = datas?.filter(item=>item.name.toLowerCase().trim().includes(nameSearch.trim().toLowerCase()));
-        if(regionSearch) {
-            datas = datas?.filter(item=>item.region.toLowerCase().includes(regionSearch.value.toLowerCase()));
+    const {data : filteredValue} = useQuery(["filteredCountries",debouncedValue,regionSearch?.value || "all"], async () => {
+        if(!debouncedValue &&  !regionSearch.value) return []
+        const data = getCountriesByParams(debouncedValue,regionSearch?.value)
+        return data
+    })
+
+    useEffect(() => {
+        if (inView && data?.pages[data.pages.length - 1].length > 0 && filteredValue.length === 0) {
+            fetchNextPage({pageParam:page - 20})
         }
-        return datas
-    })();
+    },[inView])
 
     return (
-        <>  <Helmet>
+        <>  
+            <Helmet>
                 <title>Home</title>
-                
             </Helmet>
-            <Header/>
             <Form nameSearch={nameSearch} setNameSearch={setNameSearch} setRegionSearch={setRegionSearch}  />
-            <CountryLists data={mutatedData!} isLoading={isLoading} error={error!} />
+            <CountryLists data={data!} filteredValue={filteredValue} isLoading={isLoading} error={error!} />
+            <div ref={ref}></div>
         </>
     )
 }
+export default Home

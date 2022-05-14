@@ -11,20 +11,29 @@ interface Props {
     isLoading:boolean,
     error:boolean
 }
-export const CountryLists:React.FC<Props> = memo(({data,isLoading,error}) => {
+export const CountryLists:React.FC<Props> = memo(({data,isLoading,error,filteredValue}) => {
     return (
         <Wrapper>
             <div className="container">
                 <Container>
                     {   isLoading ? <Spinner></Spinner> :
                         error ? <Error>Error on server side, please retry </Error> :
-                        data?.map(item=><CountryItem {...item} key={item.name}/>)
+                        filteredValue?.error ? <Error>No such countries </Error> :
+                        filteredValue?.length > 0 ? filteredValue.map(item => (
+                             <CountryItem {...item} key={item.name}/>
+                        )) :
+                        data?.pages.length > 0 && data.pages.map(page => (
+                            page.map(item => (
+                                <CountryItem {...item} key={item.name}/>
+                            ))
+                        ))
                     }        
                 </Container>
             </div>
         </Wrapper>
     )
 })
+//<CountryItem {...item} key={item.name}/>
 
 const Wrapper =styled.section`
     margin-top:20px;

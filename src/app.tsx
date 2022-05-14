@@ -1,12 +1,12 @@
 
-import React from "react"
+import React, {Suspense} from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import {BrowserRouter as Router,Routes,Route } from "react-router-dom"
-
-import { Home } from "./pages/home"
-import { Details } from "./pages/details"
+import { Header } from "./components/header";
+const DynamicHome = React.lazy(() => import("./pages/home"))
+const DynamicDetails = React.lazy(() => import("./pages/details"))
 
 import styled from "styled-components"
 import { HelmetProvider } from "react-helmet-async"
@@ -23,12 +23,15 @@ export const App:React.FC = () => {
         <HelmetProvider>
             <QueryClientProvider client={queryClient}>
             <Wrapper>
-                <Router>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/:code" element={<Details/>} />
-                    </Routes>
-                </Router>
+                <Header/>
+                <Suspense fallback={<div></div>}>
+                    <Router>
+                        <Routes>
+                            <Route path="/" element={<DynamicHome />} />
+                            <Route path="/:code" element={<DynamicDetails/>} />
+                        </Routes>
+                    </Router>
+                </Suspense>
             </Wrapper>
             <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>

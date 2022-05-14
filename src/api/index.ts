@@ -2,31 +2,56 @@
 import { Countries } from "../interfaces/";
 import type { CountriesName } from "../interfaces/";
 
-export const fetchCountry = async (id:string) => {
-    const request = await fetch(`https://restcountries.com/v2/alpha/${id}`);
-    if(!request.ok) {
-        throw new Error("error on server side");
-    }
-    const json = await request.json();
-    return json;
-}
-export const fetchCountriesName = async(array:string[]):Promise<CountriesName> => {
-    const dataBorder = array.join(",");
-    const request = await fetch(`https://restcountries.com/v2/alpha?codes=${dataBorder}&fields=name,alpha2Code`);
-    if(!request.ok) {
-        throw new Error("error on server side");
-    }
-    const json = await request.json();
-    return json
-}
+import { request, gql } from "graphql-request";
 
-export const fetchCountries = async ():Promise<Countries[]> => {
-    const response = await fetch(`https://restcountries.com/v2/all?fields=name,population,region,capital,alpha2Code,flags`);
-    if(!response.ok) {
-        throw new Error("error on server side")
+const baseURL = "https://radiant-depths-51192.herokuapp.com/graphql/"
+export const getAllCountries = async (pageParam,page) => {
+    const data = await request(baseURL, gql`
+        query {
+            getAllCountries(offset:${pageParam},limit:${page}) {
+                name,population,region,capital,alpha2Code, flags {png}
+            }
+        }
+    `)
+    return data.getAllCountries
+}
+export const getCountriesByParams = async (debouncedValue = "",regionSearch = "") => {
+    try {
+        const data = await request("http://localhost:5000/graphql", gql`
+            query {
+                getCountriesByParams(name:"${debouncedValue}",region:"${regionSearch}") {
+                    name,population,region,capital,alpha2Code, flags {png}
+                }
+            }
+        `)
+        return data.getCountriesByParams 
+    } 
+    catch (error) {
+        return {
+            error:true
+        }
     }
-    const json = await response.json();    
-    return json;
+}
+export const getCountryByCode = async (code) => {
+    const data = await request(baseURL, gql`
+            query {
+                getCountryByAlpha(id:"${code}") {
+                    name,borders,flags {svg},nativeName,population,region,subregion,capital,languages {name},topLevelDomain,currencies {name}
+                }
+            }
+        `)
+    return data.getCountryByAlpha
+}
+export const getCountriesName = async (borders) => {
+    const dataBorder = borders.join(",");
+    const data = await request(baseURL, gql`
+        query {
+            getCountriesName(countries:"${dataBorder}") {
+                alpha2Code,name
+            }
+        }
+    `)
+    return data.getCountriesName
 }
 export const  numberWithCommas = (x:number):string => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
