@@ -44,6 +44,7 @@ export const getCountryByCode = async (code) => {
 }
 export const getCountriesName = async (borders) => {
     const dataBorder = borders.join(",");
+    console.log(dataBorder)
     const data = await request(baseURL, gql`
         query {
             getCountriesName(countries:"${dataBorder}") {
