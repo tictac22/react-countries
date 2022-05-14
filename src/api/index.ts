@@ -4,7 +4,7 @@ import type { CountriesName } from "../interfaces/";
 
 import { request, gql } from "graphql-request";
 
-const baseURL = "https://radiant-depths-51192.herokuapp.com/graphql/"
+const baseURL = "https://radiant-depths-51192.herokuapp.com/graphql"
 export const getAllCountries = async (pageParam,page) => {
     const data = await request(baseURL, gql`
         query {
@@ -17,7 +17,7 @@ export const getAllCountries = async (pageParam,page) => {
 }
 export const getCountriesByParams = async (debouncedValue = "",regionSearch = "") => {
     try {
-        const data = await request("http://localhost:5000/graphql", gql`
+        const data = await request(baseURL, gql`
             query {
                 getCountriesByParams(name:"${debouncedValue}",region:"${regionSearch}") {
                     name,population,region,capital,alpha2Code, flags {png}
